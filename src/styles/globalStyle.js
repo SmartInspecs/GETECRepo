@@ -91,7 +91,42 @@ const GlobalStyle = createGlobalStyle`
         vertical-align: baseline;
     }
 
-    /* Add your custom styles here */
+    body {
+        font-family: "Outfit", sans-serif;
+    }
+
+    :root{
+
+        /* Primary colors */
+        --primary-color: #3fb063;
+        --primary-secondary: #EB5757;
+
+        /* Color-grey */
+        --color-grey-0: #F8F9FA;
+        --color-grey-1: #f4f4f4; 
+        --color-grey-2: #343B41;
+        --color-grey-3: #212529;
+        --color-grey-4: #121214;
+
+        /* Feedback */
+        --error: #E60000;
+        --warning: #FFCD07;
+        --success: #168821;
+        --information: #155BCB;
+
+        /* Font-weight */
+        --font-weight-1: 700;
+        --font-weight-2: 600; 
+        --font-weight-3: 500; 
+        --font-weight-4: 400;
+
+        /* Font size */
+        --font-size-1: 2.5rem;
+        --font-size-2: 2rem;
+        --font-size-3: 1.5rem;
+        --font-size-4: 1rem;
+        --font-size-5: 0.75rem; 
+    }
 `;
 
 export default GlobalStyle;
