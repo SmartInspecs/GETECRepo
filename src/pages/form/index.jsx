@@ -30,7 +30,6 @@ const FormPage = () => {
         delete data.outrosAutores;
         await createPublication(data);
         alert('Trabalho adicionado com sucesso!');
-        // window.location.reload();
     };
 
     const createPublication = async (data) => {
@@ -42,7 +41,6 @@ const FormPage = () => {
 // 19 - exibição dos cards
 // 24 - Filtros
 // 31 - barra de pesquisa
-// 
 
     return (
         <ContainerSml>
