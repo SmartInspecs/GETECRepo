@@ -27,10 +27,6 @@ export const Form = styled.form`
     border-radius: 0.75rem;
   }
 
-  input {
-    padding-left: 1rem;
-  }
-
   span {
     font-size: var(--font-size-5);
     color: var(--error);

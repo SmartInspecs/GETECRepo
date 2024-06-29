@@ -5,25 +5,26 @@ import { z } from 'zod';
 import logo from './../../assets/logo2.svg';
 import ContainerSml from '../../components/containerSml';
 import { Title, Form } from './style';
-import { Bounce, toast } from 'react-toastify';
-import { Firestore } from 'firebase/firestore';
-import { app } from '../../services/firebase';
+// import { Firestore } from 'firebase/firestore';
+// import { app } from '../../services/firebase';
 
 const schema = z.object({
-    titulo: z.string('Please enter a title').min(1),
-    autores: z.array(z.string()).min(1, 'Please select at least one author'),
+    titulo: z.string('Insira um título').min(1),
+    primeiroAutor: z.array(z.string()).min(1,'Por favor, selecione o primeiro autor'),
+    autores: z.array(z.string()),
     outrosAutores: z.string(),
-    localPublicacao: z.string().nonempty('Please enter a publication location'),
-    tipoTrabalho: z.enum(['Type 1', 'Type 2', 'Type 3'], 'Please select a valid work type'),
-    areaPesquisa: z.enum(['prodManag', 'digital', 'sustainable', 'perfomance'], 'Please select a valid research area'),
-    link: z.string().url('Please enter a valid URL')
+    localPublicacao: z.string().min(1,'Por favor, insira um local de publicação'),
+    ano: z.number('Insira um valor numérico'),
+    tipoTrabalho: z.enum(['Type 1', 'Type 2', 'Type 3'], 'Selecione o tipo do trabalho'),
+    areaPesquisa: z.enum(['prodManag', 'digital', 'sustainable', 'perfomance'], 'Selecione uma área de pesquisa'),
+    link: z.string().url('Insira uma URL válida')
 });
 
-const autores = ['Dayana B. Costa', 'Emerson A. M. Ferreira', 'Cristina T. Pérez', 
+const autoresList = ['Dayana B. Costa', 'Emerson A. M. Ferreira', 'Cristina T. Pérez', 
     'Sávio Melo', 'Roseneia Melo', 'Hugo S. Peinado', 'Bruno Leão', 'Pedro A. V. F. Braga', 
     'Douglas M. Brito', 'Alisson S. Silva', 'Caroline S. Araújo', 'Carolina A. de Oliveira', 
     'Vanessa C. Pacheco', 'Mahara I. S. C. Lima', 'Mirian C. F. Santos', 'Natasha Thomas', 
-    'Elaine Alberte', 'Laura Fernandes', 'Rafael Sena', 'Walisson Santos', 'Rafaela Rey'];
+    'Elaine Alberte', 'Luara Fernandes', 'Rafael Sena', 'Walisson Santos', 'Rafaela Rey'];
 
 const FormPage = () => {
     const { register, handleSubmit, formState: { errors } } = useForm({
@@ -35,18 +36,21 @@ const FormPage = () => {
         console.log(data);
     };
 
-    const db = Firestore(app)
+    // remover natasha, bruno
+    // pensar em forma de ordenação de autor
 
-    const criarTrabalho = async (data) => {
-        try {
-            const docRef = await db.collection('trabalhos').add(data);
-            console.log('Document written with ID: ', docRef.id);
-            alert('Trabalho registrado com sucesso!')
-        } catch (e) {
-            console.error('Error adding document: ', e);
-            alert('Houve um erro na adição do trabalho!')
-        }
-    }
+    // const db = Firestore(app)
+
+    // const criarTrabalho = async (data) => {
+    //     try {
+    //         const docRef = await db.collection('trabalhos').add(data);
+    //         console.log('Document written with ID: ', docRef.id);
+    //         alert('Trabalho registrado com sucesso!')
+    //     } catch (e) {
+    //         console.error('Error adding document: ', e);
+    //         alert('Houve um erro na adição do trabalho!')
+    //     }
+    // }
     return (
         <ContainerSml>
             <img src={logo} alt="" />
@@ -56,9 +60,18 @@ const FormPage = () => {
                 <label>Título</label>
                 <input type="text" {...register('titulo')} />
                 {errors.titulo && <span>{errors.titulo.message}</span>}
-                <label>Autores</label>
+                <label>Primero Autor</label>
                 <div className="checkbox">
-                    {autores.map((autor, index) => (
+                    {autoresList.map((autor, index) => (
+                        <div key={index}>
+                            <input type="radio" {...register('primeroAutor')} value={autor} />
+                            <label>{autor}</label>
+                        </div>
+                    ))}
+                </div>              
+                <label>Outros autores</label>
+                <div className="checkbox">
+                    {autoresList.map((autor, index) => (
                         <div key={index}>
                             <input type="checkbox" {...register('autores')} value={autor} />
                             <label>{autor}</label>
