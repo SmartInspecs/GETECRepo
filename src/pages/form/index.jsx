@@ -1,24 +1,14 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
 import logo from './../../assets/logo2.svg';
 import ContainerSml from '../../components/containerSml';
 import { Title, Form } from './style';
+import { addDoc, collection } from 'firebase/firestore';
+import { db } from '../../services/firebase';
+import { useNavigate } from 'react-router-dom';
 // import { Firestore } from 'firebase/firestore';
 // import { app } from '../../services/firebase';
 
-const schema = z.object({
-    titulo: z.string('Insira um título').min(1),
-    primeiroAutor: z.array(z.string()).min(1,'Por favor, selecione o primeiro autor'),
-    autores: z.array(z.string()),
-    outrosAutores: z.string(),
-    localPublicacao: z.string().min(1,'Por favor, insira um local de publicação'),
-    ano: z.number('Insira um valor numérico'),
-    tipoTrabalho: z.enum(['Type 1', 'Type 2', 'Type 3'], 'Selecione o tipo do trabalho'),
-    areaPesquisa: z.enum(['prodManag', 'digital', 'sustainable', 'perfomance'], 'Selecione uma área de pesquisa'),
-    link: z.string().url('Insira uma URL válida')
-});
 
 const autoresList = ['Dayana B. Costa', 'Emerson A. M. Ferreira', 'Cristina T. Pérez', 
     'Sávio Melo', 'Roseneia Melo', 'Hugo S. Peinado', 'Bruno Leão', 'Pedro A. V. F. Braga', 
@@ -28,65 +18,63 @@ const autoresList = ['Dayana B. Costa', 'Emerson A. M. Ferreira', 'Cristina T. P
 
 const FormPage = () => {
     const { register, handleSubmit, formState: { errors } } = useForm({
-        resolver: zodResolver(schema)
+        
     });
 
+    const publCollectionRef  = collection(db, 'publications')
+    const navigate = useNavigate();
+
     const onSubmit = (data) => {
+        data.autores = [data.primeroAutor, ...data.autores];
         data.autores = data.autores.concat(data.outrosAutores.split(';').filter((autor) => autor !== ''));
-        console.log(data);
+        delete data.outrosAutores;
+        createPublication(data);
+        alert('Trabalho adicionado com sucesso!');
     };
 
-    // remover natasha, bruno
-    // pensar em forma de ordenação de autor
+    const createPublication = async (data) => {
+        const docRef = await addDoc(publCollectionRef, data);
+        console.log('Document written with ID: ', docRef.id);
+    };
 
-    // const db = Firestore(app)
-
-    // const criarTrabalho = async (data) => {
-    //     try {
-    //         const docRef = await db.collection('trabalhos').add(data);
-    //         console.log('Document written with ID: ', docRef.id);
-    //         alert('Trabalho registrado com sucesso!')
-    //     } catch (e) {
-    //         console.error('Error adding document: ', e);
-    //         alert('Houve um erro na adição do trabalho!')
-    //     }
-    // }
     return (
         <ContainerSml>
             <img src={logo} alt="" />
             <Title>Registro de trabalhos</Title>
             <Title>GETEC Repository</Title>
+            <button onClick={()=>navigate("/view")}>Ir para visualização</button>
             <Form onSubmit={handleSubmit(onSubmit)}>
-                <label>Título</label>
-                <input type="text" {...register('titulo')} />
+                <label htmlFor='titulo'>Título</label>
+                <input id='titulo' type="text" {...register('titulo')} />
                 {errors.titulo && <span>{errors.titulo.message}</span>}
                 <label>Primero Autor</label>
                 <div className="checkbox">
                     {autoresList.map((autor, index) => (
                         <div key={index}>
-                            <input type="radio" {...register('primeroAutor')} value={autor} />
-                            <label>{autor}</label>
+                            <input id={autor} type="radio" {...register('primeroAutor', { required: true })} value={autor} />
+                            <label htmlFor={autor}>{autor}</label>
                         </div>
                     ))}
-                </div>              
+                </div>        
+                {errors.primeroAutor && <span>{errors.primeroAutor.message}</span>}      
                 <label>Outros autores</label>
                 <div className="checkbox">
                     {autoresList.map((autor, index) => (
                         <div key={index}>
-                            <input type="checkbox" {...register('autores')} value={autor} />
-                            <label>{autor}</label>
+                            <input type="checkbox" id={autor+index} {...register('autores')} value={autor} />
+                            <label htmlFor={autor+index}>{autor}</label>
                         </div>
                     ))}
                 </div>
                 {errors.autores && <span>{errors.autores.message}</span>}
-                <label>Outros Autores</label>
-                <input type="text" {...register('outrosAutores')} placeholder='Insira aqui os autores não citados acima - separe-os com ";" sem espaço'/>
+                <label htmlFor='outros'>Autores não citados</label>
+                <input id='outros' type="text" {...register('outrosAutores')} placeholder='Insira aqui os autores não citados acima - separe-os com ";" sem espaço'/>
                 {errors.outrosAutores && <span>{errors.outrosAutores.message}</span>}
-                <label>Local de publicação</label>
-                <input type="text" {...register('localPublicacao')} />
+                <label htmlFor='local'>Local de publicação</label>
+                <input id='local' type="text" {...register('localPublicacao', { required: true })} />
                 {errors.localPublicacao && <span>{errors.localPublicacao.message}</span>}
-                <label>Área de pesquisa</label>
-                <select {...register('areaPesquisa')}>
+                <label htmlFor='areaPesquisa'>Área de pesquisa</label>
+                <select id='areaPesquisa' {...register('areaPesquisa', { required: true })}>
                     <option value="">Selecione a área de pesquisa</option>
                     <option value="prodManag">Production management</option>
                     <option value="digital">Digital technology in construction</option>
@@ -94,16 +82,21 @@ const FormPage = () => {
                     <option value="perfomance">Perfomance measurement and benchmarking</option>
                 </select>
                 {errors.areaPesquisa && <span>{errors.areaPesquisa.message}</span>}
-                <label>Tipo de trabalho</label>
-                <select {...register('tipoTrabalho')}>
+                <label htmlFor='tipo'>Tipo de trabalho</label>
+                <select id='tipo' {...register('tipoTrabalho', { required: true })}>
                     <option value="">Selecione o tipo</option>
-                    <option value="Type 1">Artigo</option>
-                    <option value="Type 2">Journal</option>
-                    <option value="Type 3">Congresso</option>
+                    <option value="artigo_periodico">Artigo em Periódico</option>
+                    <option value="artigo_congresso">Artigo em Congresso</option>
+                    <option value="anais_evento">Trabalho Publicado em Anal de Evento</option>
+                    <option value="dissertacoes_mestrado">Dissertações de Mestrado</option>
+                    <option value="teses_doutorado">Teses de Doutorado</option>
+                    <option value="tcc">Trabalho de Conclusão de Curso</option>
+                    <option value="livros">Livros e Capítulos</option>
+                    <option value="tcc">Trabalho de Conclusão de Curso</option>
                 </select>
                 {errors.tipoTrabalho && <span>{errors.tipoTrabalho.message}</span>}
-                <label>Link</label>
-                <input type="text" {...register('link')} />
+                <label htmlFor='link'>Link</label>
+                <input id='link' type="text" {...register('link', { required: true })} />
                 {errors.link && <span>{errors.link.message}</span>}
                 <button type="submit">Adicionar</button>
             </Form>
