@@ -21,7 +21,8 @@ const ViewPage = () => {
     const deletePubli = async (id) => {
         const userDoc = doc(db, 'publications', id);
         await deleteDoc(userDoc);
-        console.log('deletado', id)
+        alert('deletado com sucesso!', id);
+        window.location.reload();
     }
 return (
     <ContainerView>
