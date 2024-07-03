@@ -30,6 +30,7 @@ const FormPage = () => {
         delete data.outrosAutores;
         createPublication(data);
         alert('Trabalho adicionado com sucesso!');
+        window.location.reload();
     };
 
     const createPublication = async (data) => {

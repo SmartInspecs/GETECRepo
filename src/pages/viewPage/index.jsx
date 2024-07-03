@@ -23,23 +23,27 @@ const ViewPage = () => {
         await deleteDoc(userDoc);
         console.log('deletado', id)
     }
-  return (
+return (
     <ContainerView>
-        <div>ViewPage</div>
-        <button onClick={() => navigate("/registro")}>Voltar para registro</button>
-        <div className='list'>
-            {publications.map((publ, index) => (
-                <ul key={index}>
-                    <li>
-                        <span>{publ.titulo}</span>
-                        <span>{publ.primeroAutor}</span>
-                        <button onClick={() => deletePubli(publ.id)}>Excluir</button>
-                    </li>
-                </ul>
-            ))}
-        </div>
+            <div>ViewPage</div>
+            <button onClick={() => navigate("/registro")}>Voltar para registro</button>
+            <div className='list'>
+                    {publications.length === 0 ? (
+                            <p>Nenhuma publicação encontrada.</p>
+                    ) : (
+                            publications.map((publ, index) => (
+                                    <ul key={index}>
+                                            <li>
+                                                    <span>{publ.titulo}</span>
+                                                    <span>{publ.primeroAutor}</span>
+                                                    <button onClick={() => deletePubli(publ.id)}>Excluir</button>
+                                            </li>
+                                    </ul>
+                            ))
+                    )}
+            </div>
     </ContainerView>
-  )
+)
 }
 
 export default ViewPage
