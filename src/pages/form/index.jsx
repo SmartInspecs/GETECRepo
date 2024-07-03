@@ -36,6 +36,7 @@ const FormPage = () => {
     const createPublication = async (data) => {
         const docRef = await addDoc(publCollectionRef, data);
         console.log('Document written with ID: ', docRef.id);
+        window.location.reload();
     };
 
     return (
@@ -93,7 +94,6 @@ const FormPage = () => {
                     <option value="teses_doutorado">Teses de Doutorado</option>
                     <option value="tcc">Trabalho de Conclusão de Curso</option>
                     <option value="livros">Livros e Capítulos</option>
-                    <option value="tcc">Trabalho de Conclusão de Curso</option>
                 </select>
                 {errors.tipoTrabalho && <span>{errors.tipoTrabalho.message}</span>}
                 <label htmlFor='link'>Link</label>
