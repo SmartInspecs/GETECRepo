@@ -24,13 +24,13 @@ const FormPage = () => {
     const publCollectionRef  = collection(db, 'publications')
     const navigate = useNavigate();
 
-    const onSubmit = (data) => {
+    const onSubmit = async (data) => {
         data.autores = [data.primeroAutor, ...data.autores];
         data.autores = data.autores.concat(data.outrosAutores.split(';').filter((autor) => autor !== ''));
         delete data.outrosAutores;
-        createPublication(data);
+        await createPublication(data);
         alert('Trabalho adicionado com sucesso!');
-        window.location.reload();
+        // window.location.reload();
     };
 
     const createPublication = async (data) => {
@@ -75,6 +75,9 @@ const FormPage = () => {
                 <label htmlFor='local'>Local de publicação</label>
                 <input id='local' type="text" {...register('localPublicacao', { required: true })} />
                 {errors.localPublicacao && <span>{errors.localPublicacao.message}</span>}
+                <label htmlFor='local'>Ano de publicação</label>
+                <input id='local' type="number" {...register('ano', { required: true })} />
+                {errors.ano && <span>{errors.ano.message}</span>}
                 <label htmlFor='areaPesquisa'>Área de pesquisa</label>
                 <select id='areaPesquisa' {...register('areaPesquisa', { required: true })}>
                     <option value="">Selecione a área de pesquisa</option>
