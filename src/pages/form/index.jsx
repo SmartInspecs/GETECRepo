@@ -39,6 +39,11 @@ const FormPage = () => {
         window.location.reload();
     };
 
+// 19 - exibição dos cards
+// 24 - Filtros
+// 31 - barra de pesquisa
+// 
+
     return (
         <ContainerSml>
             <img src={logo} alt="" />
