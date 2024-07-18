@@ -6,7 +6,7 @@ import ViewPage from '../pages/viewPage';
 const RoutesMain = () => {
     return(
         <Routes>
-            <Route path='/view' element={<ViewPage/>}/>
+            <Route path='/' element={<ViewPage/>}/>
             <Route path='/registro' element={<FormPage/>}/>
             <Route path='*' element={<h1>Not Found</h1>}/>
         </Routes>

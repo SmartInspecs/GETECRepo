@@ -5,6 +5,13 @@ export const ContainerView = styled.div`
   max-width: 1060px;
   height: 100vh;
 
+  .nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 24px;
+  }
+
   .list {
     margin-top: 24px;
     display: flex;
@@ -12,6 +19,7 @@ export const ContainerView = styled.div`
     gap: 12px;
     align-items: center;
   }
+
   ul {
     list-style-type: none;
     padding: 0;
