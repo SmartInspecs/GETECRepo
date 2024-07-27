@@ -59,6 +59,8 @@ const CardLg = ({ publ }) => {
     }
   };
 
+  //implementar tradução
+
   return (
     <CardWrapper id={publications.id ? publications.id : "Card"}>
       <div className="header">

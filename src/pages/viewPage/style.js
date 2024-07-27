@@ -11,13 +11,14 @@ export const ContainerView = styled.div`
     align-items: center;
     margin-top: 24px;
 
-    a {
+    p {
       text-decoration: none;
       color: black;
       transition: 0.3s ease;
+      cursor: pointer;
     }
 
-    a:hover {
+    p:hover {
       color: #575454;
       transform: scale(1.05);
     }
@@ -156,22 +157,26 @@ export const FormFilter = styled.form`
   flex-direction: column;
   align-items: stretch;
   gap: 16px;
-  .year {
+  /* .year {
     display: flex;
     flex-direction: column;
 
     div {
       display: flex;
-      flex-direction: column;
       gap: 12px;
+      flex-wrap: wrap;
+      align-items: center;
 
       .item {
         display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        align-items: center;
         flex-direction: row-reverse;
         justify-content: flex-end;
       }
     }
-  }
+  } */
 
   label,
   h3 {
@@ -185,6 +190,7 @@ export const FormFilter = styled.form`
     }
   }
   select {
+    width: 90%;
     border-radius: 8px;
   }
   button {

@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { ContainerView, FormFilter } from "./style";
 import { collection, deleteDoc, doc, getDocs } from "firebase/firestore";
 import { db } from "../../services/firebase";
-import { Link } from "react-router-dom";
 import logo from "./../../assets/logo2.svg";
 import searchIcon from "./../../assets/search-icon.svg";
 import CardLg from "../../components/cardLg";
@@ -31,21 +30,39 @@ const ViewPage = () => {
     getPublications();
   }, []);
 
-  const redirect = () => {
-    window.location.href = "https://getec.eng.ufba.br/";
+  const redirect = (local) => {
+    window.location.href = `https://getec.eng.ufba.br/${local}`;
   };
 
   const search = (e) => {
     e.preventDefault();
     const search = e.target.value;
-    setSearchPubl(
-      publications.filter(
-        (publ) =>
-          publ.titulo.toLowerCase().includes(search.toLowerCase()) ||
-          publ.autores.join().toLowerCase().includes(search.toLowerCase()) ||
-          publ.localPublicacao.toLowerCase().includes(search.toLowerCase())
-      )
+    const results = publications.filter(
+      (publ) =>
+        publ.titulo.toLowerCase().includes(search.toLowerCase()) ||
+        publ.autores.join().toLowerCase().includes(search.toLowerCase()) ||
+        publ.localPublicacao.toLowerCase().includes(search.toLowerCase())
     );
+    if (results.length === 0) {
+      alert("No results found");
+    }
+    setSearchPubl(results);
+  };
+
+  const filter = () => {
+    const researchArea = document.getElementById("research-area").value;
+    const autor = document.getElementById("autor").value;
+    const tipo = document.getElementById("tipo-trabalho").value;
+    const results = publications.filter(
+      (publ) =>
+        (researchArea === "" || publ.areaPesquisa === researchArea) &&
+        (autor === "all" || publ.autores.includes(autor)) &&
+        (tipo === "" || publ.tipoTrabalho === tipo)
+    );
+    if (results.length === 0) {
+      alert("No results found");
+    }
+    setSearchPubl(results);
   };
 
   const deletePubli = async (id) => {
@@ -59,10 +76,12 @@ const ViewPage = () => {
     <ContainerView>
       <nav className="nav">
         <img src={logo} alt="logotipo do GETEC" />
-        <Link>Scientific Production</Link>
-        <Link>Researches</Link>
-        <Link>Events</Link>
-        <button onClick={redirect}>Go to our website</button>
+        <p onClick={() => redirect()}>Scientific Production</p>
+        <p onClick={() => redirect("research.html")}>Researches</p>
+        <p onClick={() => redirect("event.html")}>Events</p>
+        <button onClick={() => redirect("index.html")}>
+          Go to our website
+        </button>
       </nav>
       <div className="hero">
         <h1>Welcome to GETEC Repository</h1>
@@ -86,39 +105,6 @@ const ViewPage = () => {
         <div className="view-section__filter">
           <h2>Filters</h2>
           <FormFilter>
-            <div className="year" id="year">
-              <h3 htmlFor="year">Per year</h3>
-              <div>
-                <div className="item">
-                  <label htmlFor="2018">{`<2018`}</label>
-                  <input type="checkbox" name="" id="2018" value="2018" />
-                </div>
-                <div className="item">
-                  <label htmlFor="2019">2019</label>
-                  <input type="checkbox" name="" id="2019" value="2019" />
-                </div>
-                <div className="item">
-                  <label htmlFor="2020">2020</label>
-                  <input type="checkbox" name="" id="2020" value="2020" />
-                </div>
-                <div className="item">
-                  <label htmlFor="2021">2021</label>
-                  <input type="checkbox" name="" id="2021" value="2021" />
-                </div>
-                <div className="item">
-                  <label htmlFor="2022">2022</label>
-                  <input type="checkbox" name="" id="2022" value="2022" />
-                </div>
-                <div className="item">
-                  <label htmlFor="2023">2023</label>
-                  <input type="checkbox" name="" id="2023" value="2023" />
-                </div>
-                <div className="item">
-                  <label htmlFor="2024">2024</label>
-                  <input type="checkbox" name="" id="2024" value="2024" />
-                </div>
-              </div>
-            </div>
             <div className="research-area">
               <label htmlFor="research-area">Research Area</label>
               <select name="" id="research-area">
@@ -135,6 +121,23 @@ const ViewPage = () => {
                 </option>
               </select>
             </div>
+            <div className="tipo-trabalho">
+              <label htmlFor="tipo-trabalho">Type of Work</label>
+              <select name="" id="tipo-trabalho">
+                <option value="">Selecione o tipo do trabalho</option>
+                <option value="artigo_congresso">Artigo em Congresso</option>
+                <option value="artigo_periodico">Artigo em periódico</option>
+                <option value="anais_evento">
+                  Trabalho publicado em Anais de Evento
+                </option>
+                <option value="dissertacoes_mestrado">
+                  Dissertações de Mestrado
+                </option>
+                <option value="teses_doutorado">Teses de Doutorado</option>
+                <option value="tcc">Trabalho de Conclusão de Curso</option>
+                <option value="livros">Livros e Capítulos</option>
+              </select>
+            </div>
             <div className="autores">
               <label htmlFor="autor">Author</label>
               <select name="" id="autor">
@@ -146,18 +149,20 @@ const ViewPage = () => {
                 ))}
               </select>
             </div>
-            <button type="submit">Filter</button>
+            <button id="filter" type="button" onClick={filter}>
+              Filter
+            </button>
           </FormFilter>
         </div>
         <div className="view-section__works">
           <div className="cards">
-            {!searchPubl.length ? (
-              <p>No publications found.</p>
-            ) : (
-              searchPubl.map((publ, index) => (
-                <CardLg key={index} publ={{ publ }} />
-              ))
-            )}
+            {!searchPubl.length
+              ? publications.map((publ, index) => (
+                  <CardLg key={index} publ={{ publ }} />
+                ))
+              : searchPubl.map((publ, index) => (
+                  <CardLg key={index} publ={{ publ }} />
+                ))}
           </div>
         </div>
       </div>
