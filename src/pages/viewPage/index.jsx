@@ -10,6 +10,7 @@ const ViewPage = () => {
   const [publications, setPublications] = useState([]);
   const [autorList, setAutorList] = useState([]);
   const [searchPubl, setSearchPubl] = useState([]);
+  const [lang, setLang] = useState("en");
 
   useEffect(() => {
     const publCollectionRef = collection(db, "publications");
@@ -26,6 +27,7 @@ const ViewPage = () => {
         });
       });
       setAutorList(uniqueAutorList);
+      localStorage.setItem("lang", "en");
     };
     getPublications();
   }, []);
@@ -72,76 +74,144 @@ const ViewPage = () => {
     window.location.reload();
   };
 
+  const changeLang = () => {
+    if (lang === "pt") {
+      localStorage.setItem("lang", "en");
+      setLang("en");
+    } else {
+      localStorage.setItem("lang", "pt");
+      setLang("pt");
+    }
+  };
+
   return (
     <ContainerView>
       <nav className="nav">
         <img src={logo} alt="logotipo do GETEC" />
-        <p onClick={() => redirect()}>Scientific Production</p>
-        <p onClick={() => redirect("research.html")}>Researches</p>
-        <p onClick={() => redirect("event.html")}>Events</p>
-        <button onClick={() => redirect("index.html")}>
-          Go to our website
+        <p onClick={() => redirect()}>
+          {lang === "en" ? "Scientific Production" : "Produções Científicas"}
+        </p>
+        <p onClick={() => redirect("research.html")}>
+          {lang === "en" ? "Researches" : "Linhas de Pesquisa"}
+        </p>
+        <p onClick={() => redirect("event.html")}>
+          {lang === "en" ? "Events" : "Eventos"}
+        </p>
+        <button className="lang-btn" onClick={changeLang}>
+          {lang === "en" ? "PT-BR" : "EN"}
+        </button>
+        <button className="goto-btn" onClick={() => redirect("index.html")}>
+          {lang === "en" ? "Go to our website" : "Ir para o site"}
         </button>
       </nav>
       <div className="hero">
-        <h1>Welcome to GETEC Repository</h1>
+        <h1>
+          {lang === "en"
+            ? "Welcome to GETEC Repository"
+            : "Bem-Vindo ao repositório do GETEC"}
+        </h1>
         <p>
-          Here you can find all GETEC scientific productions, articles, theses
-          and so on
+          {lang === "en"
+            ? "Here you can find all GETEC scientific productions, articles, theses and so on"
+            : "Aqui você pode encontrar todas as produções científicas do GETEC, artigos, teses e mais"}
         </p>
         <div className="search-bar">
           <input
             type="text"
-            placeholder="Search by title, author or publication"
+            placeholder={
+              lang === "en"
+                ? "Search by title, author or publication"
+                : "Pesquise por título, autor ou publicação"
+            }
             onChange={search}
           />
           <button>
             <img src={searchIcon} alt="lupa" />
-            Search
+            {lang === "en" ? "Search" : "Buscar"}
           </button>
         </div>
       </div>
       <div className="view-section">
         <div className="view-section__filter">
-          <h2>Filters</h2>
+          <h2>{lang === "en" ? "Filters" : "Filtros"}</h2>
           <FormFilter>
             <div className="research-area">
-              <label htmlFor="research-area">Research Area</label>
+              <label htmlFor="research-area">
+                {lang === "en" ? "Research Area" : "Área de Pesquisa"}
+              </label>
               <select name="" id="research-area">
-                <option value="">Selecione a área de pesquisa</option>
-                <option value="prodManag">Production management</option>
+                <option value="">
+                  {lang === "en"
+                    ? "Select the Research Area"
+                    : "Selecione a área de pesquisa"}
+                </option>
+                <option value="prodManag">
+                  {lang === "en"
+                    ? "Production management"
+                    : "Gestão de produção"}
+                </option>
                 <option value="digital">
-                  Digital technology in construction
+                  {lang === "en"
+                    ? "Digital technology in construction"
+                    : "Tecnologia digital na construção"}
                 </option>
                 <option value="sustainable">
-                  Sustainable management in construction
+                  {lang === "en"
+                    ? "Sustainable management in construction"
+                    : "Gestão sustentável na construção"}
                 </option>
                 <option value="perfomance">
-                  Perfomance measurement and benchmarking
+                  {lang === "en"
+                    ? "Perfomance measurement and benchmarking"
+                    : "Medição de desempenho e benchmarking"}
                 </option>
               </select>
             </div>
             <div className="tipo-trabalho">
-              <label htmlFor="tipo-trabalho">Type of Work</label>
+              <label htmlFor="tipo-trabalho">
+                {lang === "en" ? "Type of Work" : "Tipo do trabalho"}
+              </label>
               <select name="" id="tipo-trabalho">
-                <option value="">Selecione o tipo do trabalho</option>
-                <option value="artigo_congresso">Artigo em Congresso</option>
-                <option value="artigo_periodico">Artigo em periódico</option>
+                <option value="">
+                  {lang === "en"
+                    ? "Select the type of work"
+                    : "Selecione o tipo do trabalho"}
+                </option>
+                <option value="artigo_congresso">
+                  {lang === "en" ? "Conference paper" : "Artigo em Congresso"}
+                </option>
+                <option value="artigo_periodico">
+                  {lang === "en" ? "Journal paper" : "Artigo em periódico"}
+                </option>
                 <option value="anais_evento">
-                  Trabalho publicado em Anais de Evento
+                  {lang === "en"
+                    ? "Work published in event proceedings"
+                    : "Trabalho publicado em Anais de Evento"}
                 </option>
                 <option value="dissertacoes_mestrado">
-                  Dissertações de Mestrado
+                  {lang === "en"
+                    ? "Master's thesis"
+                    : "Dissertações de Mestrado"}
                 </option>
-                <option value="teses_doutorado">Teses de Doutorado</option>
-                <option value="tcc">Trabalho de Conclusão de Curso</option>
-                <option value="livros">Livros e Capítulos</option>
+                <option value="teses_doutorado">
+                  {lang === "en" ? "Doctoral theses" : "Teses de Doutorado"}
+                </option>
+                <option value="tcc">
+                  {lang === "en"
+                    ? "Undergraduate theses"
+                    : "Trabalho de Conclusão de Curso"}
+                </option>
+                <option value="livros">
+                  {lang === "en" ? "Books and chapters" : "Livros e Capítulos"}
+                </option>
               </select>
             </div>
             <div className="autores">
-              <label htmlFor="autor">Author</label>
+              <label htmlFor="autor">
+                {lang === "en" ? "Author" : "Autor"}
+              </label>
               <select name="" id="autor">
-                <option value="all">All</option>
+                <option value="all">{lang === "en" ? "All" : "Todos"}</option>
                 {autorList.map((autor, index) => (
                   <option key={index} value={autor}>
                     {autor}
@@ -150,7 +220,7 @@ const ViewPage = () => {
               </select>
             </div>
             <button id="filter" type="button" onClick={filter}>
-              Filter
+              {lang === "en" ? "Filter" : "Filtrar"}
             </button>
           </FormFilter>
         </div>
@@ -158,10 +228,10 @@ const ViewPage = () => {
           <div className="cards">
             {!searchPubl.length
               ? publications.map((publ, index) => (
-                  <CardLg key={index} publ={{ publ }} />
+                  <CardLg key={index} publ={{ publ }} lang={{ lang }} />
                 ))
               : searchPubl.map((publ, index) => (
-                  <CardLg key={index} publ={{ publ }} />
+                  <CardLg key={index} publ={{ publ }} lang={{ lang }} />
                 ))}
           </div>
         </div>

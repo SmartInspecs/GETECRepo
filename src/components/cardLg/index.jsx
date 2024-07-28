@@ -14,44 +14,55 @@ import { CardWrapper } from "./style";
 
 const CardLg = ({ publ }) => {
   let publications = publ.publ;
+  let lang = localStorage.getItem("lang");
 
   const tipo = (tipo) => {
     if (tipo === "artigo_congresso") {
-      return "Artigo em Congresso";
+      return lang === "en" ? "Conference paper" : "Artigo em Congresso";
     } else if (tipo === "artigo_periodico") {
-      return "Artigo em Periódico";
+      return lang === "en" ? "Journal paper" : "Artigo em Periódico";
     } else if (tipo === "anais_evento") {
-      return "Trabalho publicado em Anaís de Evento";
+      return lang === "en"
+        ? "Work published in event proceedings"
+        : "Trabalho publicado em Anais de Evento";
     } else if (tipo === "dissertacoes_mestrado") {
-      return "Dissertações de Mestrado";
+      return lang === "en" ? "Master's thesis" : "Dissertações de Mestrado";
     } else if (tipo === "teses_doutorado") {
-      return "Teses de Doutorado";
+      return lang === "en" ? "Doctoral theses" : "Teses de Doutorado";
     } else if (tipo === "tcc") {
-      return "Trabalho de Conclusão de Curso";
+      return lang === "en"
+        ? "Undergraduate theses"
+        : "Trabalho de Conclusão de Curso";
     } else if (tipo === "livros") {
-      return "Livros e Capítulos";
+      return lang === "en" ? "Books and chapters" : "Livros e Capítulos";
     } else {
-      return "Não adicionado";
+      return lang === "en" ? "Not added" : "Não adicionado";
     }
   };
 
   const areaPesquisa = (area) => {
     if (area === "prodManag") {
-      return "Production management";
+      return lang === "en" ? "Production management" : "Gestão da produção";
     } else if (area === "digital") {
-      return "Digital technology in construction";
+      return lang === "en"
+        ? "Digital technology in construction"
+        : "Tecnologias digitais na construção";
     } else if (area === "sustainable") {
-      return "Sustainable management in construction";
+      return lang === "en"
+        ? "Sustainable management in construction"
+        : "Gestão sustentável na construção";
     } else if (area === "perfomance") {
-      return "Perfomance measurement and benchmarking";
+      return lang === "en"
+        ? "Perfomance measurement and benchmarking"
+        : "Medição de desempenho e benchmarking";
     } else {
-      return "Não adicionado";
+      return lang === "en" ? "Not added" : "Não adicionado";
     }
   };
 
   const autores = (autores) => {
     if (autores.length === 0) {
-      return "Não adicionado";
+      return lang === "en" ? "Not added" : "Não adicionado";
     } else if (autores.length > 1) {
       return autores.join(", ");
     } else {
