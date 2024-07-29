@@ -206,7 +206,11 @@ const ViewPage = () => {
                 {lang === "en" ? "Author" : "Autor"}
               </label>
               <select name="" id="autor">
-                <option value="all">{lang === "en" ? "All" : "Todos"}</option>
+                <option value="all">
+                  {lang === "en"
+                    ? "Select the first author"
+                    : "Selecione o primeiro autor"}
+                </option>
                 {autorList.map((autor, index) => (
                   <option key={index} value={autor}>
                     {autor}
@@ -223,10 +227,10 @@ const ViewPage = () => {
           <div className="cards">
             {!searchPubl.length
               ? publications.map((publ, index) => (
-                  <CardLg key={index} publ={{ publ }} lang={{ lang }} />
+                  <CardLg key={index} publ={{ publ }} />
                 ))
               : searchPubl.map((publ, index) => (
-                  <CardLg key={index} publ={{ publ }} lang={{ lang }} />
+                  <CardLg key={index} publ={{ publ }} />
                 ))}
           </div>
         </div>
