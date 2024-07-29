@@ -92,7 +92,7 @@ const ViewPage = () => {
           {lang === "en" ? "Scientific Production" : "Produções Científicas"}
         </p>
         <p onClick={() => redirect("research.html")}>
-          {lang === "en" ? "Researches" : "Linhas de Pesquisa"}
+          {lang === "en" ? "Research" : "Linhas de Pesquisa"}
         </p>
         <p onClick={() => redirect("event.html")}>
           {lang === "en" ? "Events" : "Eventos"}
@@ -182,11 +182,6 @@ const ViewPage = () => {
                 </option>
                 <option value="artigo_periodico">
                   {lang === "en" ? "Journal paper" : "Artigo em periódico"}
-                </option>
-                <option value="anais_evento">
-                  {lang === "en"
-                    ? "Work published in event proceedings"
-                    : "Trabalho publicado em Anais de Evento"}
                 </option>
                 <option value="dissertacoes_mestrado">
                   {lang === "en"

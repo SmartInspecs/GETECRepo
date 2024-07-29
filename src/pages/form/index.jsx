@@ -60,8 +60,8 @@ const FormPage = () => {
   };
 
   // 19 - exibição dos cards
-  // 24 - barra de pesquisa
-  // 31 - Filtros
+  // 24 - Filtros
+  // 31 - barra de pesquisa
 
   return (
     <ContainerSml>
@@ -148,9 +148,6 @@ const FormPage = () => {
           <option value="">Selecione o tipo</option>
           <option value="artigo_periodico">Artigo em Periódico</option>
           <option value="artigo_congresso">Artigo em Congresso</option>
-          <option value="anais_evento">
-            Trabalho Publicado em Anais de Evento
-          </option>
           <option value="dissertacoes_mestrado">
             Dissertações de Mestrado
           </option>
