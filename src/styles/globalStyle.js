@@ -99,7 +99,7 @@ const GlobalStyle = createGlobalStyle`
 
         /* Primary colors */
         --primary-color: #3fb063;
-        --primary-secondary: #EB5757;
+        --primary-secondary: #3BA05B;
 
         /* Color-grey */
         --color-grey-0: #F8F9FA;
