@@ -16,6 +16,10 @@ const CardLg = ({ publ }) => {
   let publications = publ.publ;
   let lang = localStorage.getItem("lang");
 
+  const redirectPage = () => {
+    window.location.href = publications.link;
+  };
+
   const tipo = (tipo) => {
     if (tipo === "artigo_congresso") {
       return lang === "en" ? "Conference paper" : "Artigo em Congresso";
@@ -73,7 +77,10 @@ const CardLg = ({ publ }) => {
   //implementar tradução
 
   return (
-    <CardWrapper id={publications.id ? publications.id : "Card"}>
+    <CardWrapper
+      id={publications.id ? publications.id : "Card"}
+      onClick={redirectPage}
+    >
       <div className="header">
         <span>{tipo(publications.tipoTrabalho)}</span>
         <p>

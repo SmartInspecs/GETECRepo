@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { ContainerView, FormFilter } from "./style";
-import { collection, deleteDoc, doc, getDocs } from "firebase/firestore";
+import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../services/firebase";
 import logo from "./../../assets/logo2.svg";
 import searchIcon from "./../../assets/search-icon.svg";
@@ -17,6 +17,10 @@ const ViewPage = () => {
     const getPublications = async () => {
       const data = await getDocs(publCollectionRef);
       setPublications(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+      localStorage.setItem(
+        "publications",
+        JSON.stringify(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })))
+      );
       const uniqueAutorList = [];
       data.docs.forEach((doc) => {
         const work = doc.data();
@@ -65,13 +69,6 @@ const ViewPage = () => {
       alert("No results found");
     }
     setSearchPubl(results);
-  };
-
-  const deletePubli = async (id) => {
-    const userDoc = doc(db, "publications", id);
-    await deleteDoc(userDoc);
-    alert("deletado com sucesso!", id);
-    window.location.reload();
   };
 
   const changeLang = () => {

@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import logo from "./../../assets/logo2.svg";
 import ContainerSml from "../../components/containerSml";
 import { Title, Form } from "./style";
-import { addDoc, collection } from "firebase/firestore";
+import { addDoc, collection, getDocs } from "firebase/firestore";
 import { db } from "../../services/firebase";
 import { useNavigate } from "react-router-dom";
 // import { Firestore } from 'firebase/firestore';
@@ -40,6 +40,16 @@ const FormPage = () => {
     formState: { errors },
   } = useForm({});
 
+  const [publications, setPublications] = useState([]);
+  useEffect(() => {
+    const publCollectionRef = collection(db, "publications");
+    const getPublications = async () => {
+      const data = await getDocs(publCollectionRef);
+      setPublications(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+    };
+    getPublications();
+  }, []);
+
   const publCollectionRef = collection(db, "publications");
   const navigate = useNavigate();
 
@@ -50,18 +60,20 @@ const FormPage = () => {
     );
     delete data.outrosAutores;
     await createPublication(data);
-    alert("Trabalho adicionado com sucesso!");
   };
 
   const createPublication = async (data) => {
-    const docRef = await addDoc(publCollectionRef, data);
-    console.log("Document written with ID: ", docRef.id);
-    window.location.reload();
-  };
+    data.dataCriacao = new Date().toISOString(); // Add the creation date to the data object
 
-  // 19 - exibição dos cards
-  // 24 - Filtros
-  // 31 - barra de pesquisa
+    if (publications.some((publ) => publ.titulo === data.titulo)) {
+      alert("Trabalho já cadastrado!");
+    } else {
+      const docRef = await addDoc(publCollectionRef, data);
+      console.log("Document written with ID: ", docRef.id);
+      alert("Trabalho adicionado com sucesso!");
+      window.location.reload();
+    }
+  };
 
   return (
     <ContainerSml>
