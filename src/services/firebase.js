@@ -1,10 +1,11 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "@firebase/firestore";
+import "dotenv/config";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCRiEJnAvSbfmSKozZsd2OH2haoWk0oCkQ",
-  authDomain: "getec-repo.firebaseapp.com",
+  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
   projectId: "getec-repo",
   storageBucket: "getec-repo.appspot.com",
   messagingSenderId: "188219353807",
