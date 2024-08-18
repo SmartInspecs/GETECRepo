@@ -65,7 +65,12 @@ const FormPage = () => {
   const createPublication = async (data) => {
     data.dataCriacao = new Date().toISOString(); // Add the creation date to the data object
 
-    if (publications.some((publ) => publ.titulo === data.titulo)) {
+    const normalizedTitulo = data.titulo.toLowerCase().trim();
+    if (
+      publications.some(
+        (publ) => publ.titulo.toLowerCase().trim() === normalizedTitulo
+      )
+    ) {
       alert("Trabalho já cadastrado!");
     } else {
       const docRef = await addDoc(publCollectionRef, data);
